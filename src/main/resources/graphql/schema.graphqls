@@ -1,0 +1,50 @@
+type Query {
+    courseById(id: ID): Course
+    courseByName(name: String): Course
+    courseByTeacherLastName(lastName: String): [Course]
+}
+
+type Course {
+    id: ID
+    name: String
+    description: String
+    teacher: Teacher
+    degree: Degree
+    students: [Student]
+}
+
+type Teacher {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    degrees: [TeacherHasDegree]
+}
+
+type Student {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    degrees: [StudentHasDegree]
+}
+
+type Degree {
+    id: ID
+    name: String
+}
+
+type TeacherHasDegree{
+    degree: Degree
+    earningDate: String
+}
+
+type StudentHasDegree{
+    degree: Degree
+    earningDate: String
+}
+
+
+
+
+
