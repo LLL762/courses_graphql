@@ -1,0 +1,14 @@
+query course($id: ID) {
+  courseById(id: $id){
+    id
+    name
+  }
+}
+
+
+
+
+
+
+
+

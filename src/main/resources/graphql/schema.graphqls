@@ -5,7 +5,7 @@ type Query {
 }
 
 type Course {
-    id: ID
+    id: Int
     name: String
     description: String
     teacher: Teacher
@@ -14,7 +14,7 @@ type Course {
 }
 
 type Teacher {
-    id: ID
+    id: Int
     firstName: String
     lastName: String
     email: String
@@ -22,7 +22,7 @@ type Teacher {
 }
 
 type Student {
-    id: ID
+    id: Int
     firstName: String
     lastName: String
     email: String
@@ -30,7 +30,7 @@ type Student {
 }
 
 type Degree {
-    id: ID
+    id: Int
     name: String
 }
 

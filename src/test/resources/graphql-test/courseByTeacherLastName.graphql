@@ -1,0 +1,15 @@
+query course($lastName: String) {
+    courseByTeacherLastName(lastName: $lastName){
+        id
+        name
+        teacher {
+            firstName
+            lastName
+            degrees {
+                degree {
+                    name
+                }
+            }
+        }
+    }
+}

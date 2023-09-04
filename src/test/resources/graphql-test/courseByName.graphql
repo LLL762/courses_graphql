@@ -1,0 +1,10 @@
+query course($name: String) {
+  courseByName(name: $name){
+    id
+    name
+    students {
+        firstName
+        lastName
+    }
+  }
+}
