@@ -1,11 +1,12 @@
 package com.delacasa.courses.service;
 
 import com.delacasa.courses.entity.Course;
+import com.delacasa.courses.model.MyPage;
 import com.delacasa.courses.repo.CourseRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,8 +23,9 @@ public class CourseService {
         return repo.findByName(name);
     }
 
-    public List<Course> getByTeacherLastName(final String teacherLastName) {
-        return repo.findByTeacherLastName(teacherLastName);
+    public MyPage<Course> getByTeacherLastName(final String teacherLastName, int page, int limit) {
+        return new MyPage<>(repo.findByTeacherLastName(teacherLastName, PageRequest.of(page, limit)));
+
     }
 
 }

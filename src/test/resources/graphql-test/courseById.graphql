@@ -1,8 +1,8 @@
-query course($id: ID) {
-  courseById(id: $id){
-    id
-    name
-  }
+query course($id: ID!) {
+    courseById(id: $id){
+        id
+        name
+    }
 }
 
 

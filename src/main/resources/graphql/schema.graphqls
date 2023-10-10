@@ -1,8 +1,19 @@
 type Query {
-    courseById(id: ID): Course
-    courseByName(name: String): Course
-    courseByTeacherLastName(lastName: String): [Course]
+    courseById(id: ID!): Course
+    courseByName(name: String!): Course
+    courseByTeacherLastName(lastName: String!,page:Int!,limit:Int=20): Page
 }
+
+type Page {
+    items: [Pageable],
+    page: Int,
+    limit: Int,
+    pageTotal: Int,
+    itemTotal: Int,
+    nbItems: Int
+}
+
+union Pageable = Course | Teacher | Student | Degree
 
 type Course {
     id: Int

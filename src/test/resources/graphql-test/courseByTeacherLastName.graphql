@@ -1,15 +1,22 @@
-query course($lastName: String) {
-    courseByTeacherLastName(lastName: $lastName){
-        id
-        name
-        teacher {
-            firstName
-            lastName
-            degrees {
-                degree {
-                    name
-                }
-            }
-        }
-    }
-}
+query course($lastName: String!,$page: Int!, $limit: Int) {
+    courseByTeacherLastName(lastName: $lastName,page: $page, limit: $limit)
+    {
+        page,
+        pageTotal,
+        itemTotal,
+        limit,
+        nbItems
+        items{
+            ... on Course {
+                id
+                name
+                teacher {
+                    firstName
+                    lastName
+                    degrees {
+                        degree {
+                            name
+                        }
+                    }}
+            }}
+    }}

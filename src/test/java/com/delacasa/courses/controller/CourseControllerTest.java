@@ -1,6 +1,7 @@
 package com.delacasa.courses.controller;
 
 import com.delacasa.courses.entity.*;
+import com.delacasa.courses.model.MyPage;
 import com.delacasa.courses.service.CourseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -98,14 +99,18 @@ class CourseControllerTest {
                 Course.builder().name("name4").id(4).teacher(teacher).build()
         );
 
-        when(courseServMock.getByTeacherLastName("lastName")).thenReturn(courses);
+        final MyPage<Course> page = new MyPage<>(courses, 0, 20, 1, 1, 1);
+
+        when(courseServMock.getByTeacherLastName("lastName", 0, 20)).thenReturn(page);
 
         graphQlTester
                 .documentName("courseByTeacherLastName")
                 .variable("lastName", "lastName")
+                .variable("page", 0)
+                .variable("limit", 20)
                 .execute()
                 .path("courseByTeacherLastName")
-                .matchesJson(objectMapper.writeValueAsString(courses));
+                .matchesJson(objectMapper.writeValueAsString(page));
 
 
     }
