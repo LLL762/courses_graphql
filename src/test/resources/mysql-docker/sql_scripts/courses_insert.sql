@@ -121,4 +121,28 @@ INSERT INTO course_has_student (course_id,student_id) VALUES
 (10,'2')
 ;
 
+INSERT INTO user_role (id,name,access_level) VALUES
+(1,'student',0),
+(2,'intern',25),
+(3,'teacher',50),
+(4,'admin',100)
+;
+
+INSERT INTO app_user (id,username,password) VALUES
+(1,'Bob','$2a$10$qmeSVslzlmyj7yj792AKDuKN0uooJsOXa4GhwP5PoitLAligBbGZ2'), -- value : a
+(2,'Angelika','$2a$10$qmeSVslzlmyj7yj792AKDuKN0uooJsOXa4GhwP5PoitLAligBbGZ2'), -- value : a
+(3,'Sandra','$2a$10$qmeSVslzlmyj7yj792AKDuKN0uooJsOXa4GhwP5PoitLAligBbGZ2'), -- value : a
+(4,'Admin','$2a$10$qmeSVslzlmyj7yj792AKDuKN0uooJsOXa4GhwP5PoitLAligBbGZ2'), -- value : a
+(5,'Arnold','$2a$10$qmeSVslzlmyj7yj792AKDuKN0uooJsOXa4GhwP5PoitLAligBbGZ2') -- value : a
+;
+
+INSERT INTO app_user_has_role (user_id,role_id) VALUES
+(1,1),
+(2,2),
+(3,3),
+(4,4),
+(5,1),
+(5,2)
+;
+
 SET SQL_SAFE_UPDATES = 1;

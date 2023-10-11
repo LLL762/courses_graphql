@@ -20,9 +20,9 @@ public class GraphQlExceptionHandler extends DataFetcherExceptionResolverAdapter
                     .errorType(ErrorType.INTERNAL_ERROR)
                     .message("Db connection lost!")
                     .build();
-        } else {
-            return null;
         }
+
+        return null;
     }
 }
 
