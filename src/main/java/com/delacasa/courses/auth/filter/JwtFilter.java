@@ -1,9 +1,11 @@
 package com.delacasa.courses.auth.filter;
 
 import com.delacasa.courses.auth.exception.InvalidJwtException;
+import com.delacasa.courses.auth.exception.NoJwtException;
 import com.delacasa.courses.auth.model.CustomAuthToken;
 import com.delacasa.courses.auth.service.AuthenticateService;
 import com.delacasa.courses.auth.service.JwtService;
+import com.delacasa.courses.exception.InternalServerErrException;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.FilterChain;
@@ -32,14 +34,12 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtServ;
     private final AuthenticateService authServ;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
         final String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authorization == null || !authorization.startsWith(JWT_PREFIX)) {
-            chain.doFilter(req, res);
-            return;
+            throw new NoJwtException();
         }
         try {
             SignedJWT jws = jwtServ.validate(authorization)
@@ -49,9 +49,9 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(req, res);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new InvalidJwtException();
         } catch (JOSEException e) {
-            throw new RuntimeException(e);
+            throw new InternalServerErrException();
         }
     }
 

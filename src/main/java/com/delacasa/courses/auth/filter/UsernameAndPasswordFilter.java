@@ -2,6 +2,7 @@ package com.delacasa.courses.auth.filter;
 
 import com.delacasa.courses.auth.model.CustomAuthToken;
 import com.delacasa.courses.auth.service.JwtService;
+import com.delacasa.courses.exception.BadRequestException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,13 +24,16 @@ public class UsernameAndPasswordFilter extends UsernamePasswordAuthenticationFil
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtServ;
 
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
         final String principal = request.getParameter("username");
         final String credentials = request.getParameter("password");
+
+        if (principal == null) throw new BadRequestException("Missing username");
+        if (credentials == null) throw new BadRequestException("Missing password");
+
         final UsernamePasswordAuthenticationToken auth =
                 new UsernamePasswordAuthenticationToken(principal, credentials);
 
@@ -44,8 +48,9 @@ public class UsernameAndPasswordFilter extends UsernamePasswordAuthenticationFil
     }
 
     @Override
-    //TODO do
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         super.unsuccessfulAuthentication(request, response, failed);
     }
+
+
 }
