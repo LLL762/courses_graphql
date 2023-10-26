@@ -1,5 +1,6 @@
 package com.delacasa.courses.controller;
 
+import com.delacasa.courses.auth.service.UserRoleService;
 import com.delacasa.courses.entity.*;
 import com.delacasa.courses.model.CourseInput;
 import com.delacasa.courses.model.MyPage;
@@ -8,10 +9,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
+import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +24,9 @@ import java.util.Set;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static org.mockito.Mockito.when;
 
-@GraphQlTest(CourseController.class)
-class CourseControllerTest {
+@SpringBootTest
+@AutoConfigureGraphQlTester
+class CourseControllerTestIT {
 
     @Autowired
     private GraphQlTester graphQlTester;
@@ -32,10 +37,14 @@ class CourseControllerTest {
     @MockBean
     private CourseService courseServMock;
 
+    @MockBean
+    private UserRoleService userRoleServMock;
+
     @PostConstruct
     void postConstruct() {
         objectMapper.setSerializationInclusion(NON_NULL);
     }
+
 
     @Test
     void courseById() throws JsonProcessingException {
@@ -56,6 +65,7 @@ class CourseControllerTest {
 
     @Test
     void courseByName() throws JsonProcessingException {
+
         final Set<Student> fakeStudents = Set.of(
                 Student.builder().firstName("firstname1").lastName("lastname1").build(),
                 Student.builder().firstName("firstname2").lastName("lastname2").build(),
@@ -79,7 +89,10 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void courseByTeacherLastName() throws JsonProcessingException {
+
+        when(userRoleServMock.hasAccessLevel(Mockito.any(), Mockito.any())).thenReturn(true);
 
         final Set<TeacherHasDegree> degrees = Set.of(
                 TeacherHasDegree.builder().degree(Degree.builder().name("degree1").build()).build(),
@@ -114,6 +127,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void addCourse() throws JsonProcessingException {
 
         final CourseInput courseInput = new CourseInput("name", "description", 1, 1);
@@ -122,6 +136,7 @@ class CourseControllerTest {
         expected.setDegree(null);
         expected.setTeacher(null);
 
+        when(userRoleServMock.hasAccessLevel(Mockito.any(), Mockito.any())).thenReturn(true);
         when(courseServMock.saveCourse(courseInput)).thenReturn(expected);
 
         graphQlTester
@@ -131,5 +146,4 @@ class CourseControllerTest {
                 .path("addCourse")
                 .matchesJson(objectMapper.writeValueAsString(expected));
     }
-
 }

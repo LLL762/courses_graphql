@@ -1,6 +1,7 @@
 package com.delacasa.courses.service;
 
 import com.delacasa.courses.entity.Course;
+import com.delacasa.courses.model.CourseInput;
 import com.delacasa.courses.model.MyPage;
 import com.delacasa.courses.repo.CourseRepo;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,10 @@ public class CourseService {
     public MyPage<Course> getByTeacherLastName(final String teacherLastName, int page, int limit) {
         return new MyPage<>(repo.findByTeacherLastName(teacherLastName, PageRequest.of(page, limit)));
 
+    }
+
+    public Course saveCourse(CourseInput courseInput) {
+        return repo.save(courseInput.toCourse());
     }
 
 }

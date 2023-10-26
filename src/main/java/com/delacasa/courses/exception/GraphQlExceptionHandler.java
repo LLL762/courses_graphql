@@ -4,6 +4,7 @@ import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,19 @@ public class GraphQlExceptionHandler extends DataFetcherExceptionResolverAdapter
                     .errorType(ErrorType.INTERNAL_ERROR)
                     .message("Db connection lost!")
                     .build();
-        } else {
-            return null;
         }
+
+        if (ex instanceof DataIntegrityViolationException) {
+            return GraphqlErrorBuilder.newError()
+                    .errorType(ErrorType.INTERNAL_ERROR)
+                    .message(ex.getMessage())
+                    .build();
+        }
+        
+        return GraphqlErrorBuilder.newError()
+                .errorType(ErrorType.INTERNAL_ERROR)
+                .message(ex.getMessage())
+                .build();
     }
 }
 

@@ -4,6 +4,10 @@ type Query {
     courseByTeacherLastName(lastName: String!,page:Int!,limit:Int=20): Page
 }
 
+type Mutation {
+    addCourse(course: CourseInput!): Course
+}
+
 type Page {
     items: [Pageable],
     page: Int,
@@ -43,6 +47,13 @@ type Student {
 type Degree {
     id: Int
     name: String
+}
+
+input CourseInput {
+    name: String!
+    description: String!
+    degree: Int!
+    teacher: Int!
 }
 
 type TeacherHasDegree{
