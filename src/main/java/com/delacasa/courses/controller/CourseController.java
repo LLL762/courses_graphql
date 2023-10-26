@@ -1,10 +1,12 @@
 package com.delacasa.courses.controller;
 
 import com.delacasa.courses.entity.Course;
+import com.delacasa.courses.model.CourseInput;
 import com.delacasa.courses.model.MyPage;
 import com.delacasa.courses.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -32,5 +34,12 @@ public class CourseController {
     public MyPage<Course> courseByTeacherLastName(@Argument String lastName, @Argument int page, @Argument int limit) {
         return courseServ.getByTeacherLastName(lastName, page, limit);
     }
+
+    @MutationMapping
+    @PreAuthorize("@userRoleServ.hasAccessLevel(authentication,'admin')")
+    public Course addCourse(@Argument CourseInput course) {
+        return courseServ.saveCourse(course);
+    }
+
 
 }

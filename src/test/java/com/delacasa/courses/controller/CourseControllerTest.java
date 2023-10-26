@@ -1,6 +1,7 @@
 package com.delacasa.courses.controller;
 
 import com.delacasa.courses.entity.*;
+import com.delacasa.courses.model.CourseInput;
 import com.delacasa.courses.model.MyPage;
 import com.delacasa.courses.service.CourseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,7 +36,6 @@ class CourseControllerTest {
     void postConstruct() {
         objectMapper.setSerializationInclusion(NON_NULL);
     }
-
 
     @Test
     void courseById() throws JsonProcessingException {
@@ -111,7 +111,25 @@ class CourseControllerTest {
                 .execute()
                 .path("courseByTeacherLastName")
                 .matchesJson(objectMapper.writeValueAsString(page));
-
-
     }
+
+    @Test
+    void addCourse() throws JsonProcessingException {
+
+        final CourseInput courseInput = new CourseInput("name", "description", 1, 1);
+        final Course expected = courseInput.toCourse();
+        expected.setId(1);
+        expected.setDegree(null);
+        expected.setTeacher(null);
+
+        when(courseServMock.saveCourse(courseInput)).thenReturn(expected);
+
+        graphQlTester
+                .documentName("addCourse")
+                .variable("courseInput", courseInput.toMap())
+                .execute()
+                .path("addCourse")
+                .matchesJson(objectMapper.writeValueAsString(expected));
+    }
+
 }

@@ -19,7 +19,7 @@ USE `courses` ;
 -- Table `courses`.`teacher`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `courses`.`teacher` (
-  `id` INT UNSIGNED NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(255) NOT NULL,
   `last_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
@@ -42,7 +42,7 @@ ENGINE = InnoDB;
 -- Table `courses`.`course`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `courses`.`course` (
-  `id` INT UNSIGNED NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `teacher_id` INT UNSIGNED NOT NULL,
   `degree_id` INT UNSIGNED NOT NULL,
   `name` VARCHAR(200) NOT NULL,

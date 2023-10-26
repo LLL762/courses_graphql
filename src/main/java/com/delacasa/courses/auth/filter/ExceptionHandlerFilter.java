@@ -39,7 +39,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                     .write(jsonMapper.writeValueAsString(ce.toJson(req.getRequestURI())));
             return;
         }
-
+        
         resp.setStatus(500);
         resp.getWriter()
                 .write(jsonMapper.writeValueAsString(

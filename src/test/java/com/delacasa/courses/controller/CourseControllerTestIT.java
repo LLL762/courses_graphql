@@ -2,6 +2,7 @@ package com.delacasa.courses.controller;
 
 import com.delacasa.courses.auth.service.UserRoleService;
 import com.delacasa.courses.entity.*;
+import com.delacasa.courses.model.CourseInput;
 import com.delacasa.courses.model.MyPage;
 import com.delacasa.courses.service.CourseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -123,7 +124,26 @@ class CourseControllerTestIT {
                 .execute()
                 .path("courseByTeacherLastName")
                 .matchesJson(objectMapper.writeValueAsString(page));
+    }
 
+    @Test
+    @WithMockUser
+    void addCourse() throws JsonProcessingException {
 
+        final CourseInput courseInput = new CourseInput("name", "description", 1, 1);
+        final Course expected = courseInput.toCourse();
+        expected.setId(1);
+        expected.setDegree(null);
+        expected.setTeacher(null);
+
+        when(userRoleServMock.hasAccessLevel(Mockito.any(), Mockito.any())).thenReturn(true);
+        when(courseServMock.saveCourse(courseInput)).thenReturn(expected);
+
+        graphQlTester
+                .documentName("addCourse")
+                .variable("courseInput", courseInput.toMap())
+                .execute()
+                .path("addCourse")
+                .matchesJson(objectMapper.writeValueAsString(expected));
     }
 }
